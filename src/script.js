@@ -72,6 +72,16 @@ export const script = `
     document.getElementById('addNoteBtn').style.display = 'block';
     const category = data.categories.find(c => c.id === categoryId);
     document.getElementById('contentTitle').textContent = category ? category.name : '笔记';
+    
+    // 移动端选择目录后自动关闭侧边栏
+    if (window.innerWidth <= 768) {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (sidebar && overlay) {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+      }
+    }
   }
   
   // 添加目录
@@ -326,6 +336,23 @@ export const script = `
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+  }
+  
+  // 切换侧边栏（移动端）
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    
+    if (sidebar && overlay) {
+      const isOpen = sidebar.classList.contains('open');
+      if (isOpen) {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+      } else {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+      }
+    }
   }
   
   // 初始化

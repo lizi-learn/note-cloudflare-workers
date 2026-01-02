@@ -13,8 +13,11 @@ export function getHTML() {
 </head>
 <body>
   <div class="app-container">
+    <!-- 遮罩层（移动端用） -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
     <!-- 左侧目录面板 -->
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="sidebar-title">📁 目录</div>
         <button class="add-category-btn" onclick="addCategory()">+ 新建目录</button>
@@ -27,6 +30,7 @@ export function getHTML() {
     <!-- 右侧内容区域 -->
     <div class="main-content">
       <div class="content-header">
+        <button class="sidebar-toggle-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" title="切换侧边栏">☰</button>
         <div class="content-title" id="contentTitle">请选择目录</div>
         <button class="add-note-btn" id="addNoteBtn" onclick="addNote()" style="display: none;">+ 新建笔记</button>
       </div>

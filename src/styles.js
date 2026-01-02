@@ -142,6 +142,36 @@ export const styles = `
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
+  }
+  
+  .sidebar-toggle-btn {
+    display: none;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: #f3f4f6;
+    color: #1f2937;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  
+  .sidebar-toggle-btn:hover {
+    background: #e5e7eb;
+  }
+  
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
   }
   
   .content-title {
@@ -341,5 +371,87 @@ export const styles = `
   .categories-list::-webkit-scrollbar-thumb:hover,
   .notes-list::-webkit-scrollbar-thumb:hover {
     background: #9ca3af;
+  }
+  
+  /* 移动端响应式样式 */
+  @media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      left: -280px;
+      top: 0;
+      bottom: 0;
+      z-index: 999;
+      transition: left 0.3s ease;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sidebar.open {
+      left: 0;
+    }
+    
+    .sidebar-overlay {
+      display: block;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .sidebar-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .sidebar-toggle-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .content-header {
+      padding: 12px 16px;
+    }
+    
+    .content-title {
+      font-size: 18px;
+    }
+    
+    .add-note-btn {
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+    
+    .notes-list {
+      padding: 12px;
+    }
+    
+    .note-item {
+      padding: 10px;
+      margin-bottom: 6px;
+    }
+    
+    .note-content {
+      font-size: 13px;
+    }
+    
+    .sidebar-header {
+      padding: 16px;
+    }
+    
+    .sidebar-title {
+      font-size: 16px;
+    }
+    
+    .add-category-btn {
+      padding: 6px 10px;
+      font-size: 13px;
+    }
+    
+    .category-item {
+      padding: 10px;
+    }
+    
+    .category-name {
+      font-size: 13px;
+    }
   }
 `;
