@@ -1,0 +1,9 @@
+name = "bookmark-notebook"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "NOTEBOOK_DATA"
+id = "0ae076d6d5d148e087017006b3edb3f0"
+preview_id = "c83cd53640a44abb8421416c8d218016"
+
