@@ -248,7 +248,7 @@ export const script = `
     data.notes.push(newNote);
     renderNotes(currentCategoryId);
     editNote(newNote.id);
-    saveData();
+    // 不立即保存，等用户输入内容后再保存
   }
   
   // 编辑笔记
@@ -261,6 +261,7 @@ export const script = `
     
     const contentDiv = noteItem.querySelector('.note-content');
     const originalContent = note.content;
+    const isNewNote = !originalContent || originalContent.trim() === '';
     
     noteItem.classList.add('editing');
     
@@ -271,6 +272,13 @@ export const script = `
     // 保存处理函数
     const saveHandler = () => {
       const newContent = textarea.value.trim();
+      // 如果内容为空，删除笔记
+      if (!newContent) {
+        data.notes = data.notes.filter(n => n.id !== noteId);
+        renderNotes(currentCategoryId);
+        saveData();
+        return;
+      }
       note.content = newContent;
       renderNotes(currentCategoryId);
       saveData();
@@ -278,17 +286,44 @@ export const script = `
     
     // 取消处理函数
     const cancelHandler = () => {
+      // 如果是新笔记（原始内容为空），删除它
+      if (isNewNote) {
+        data.notes = data.notes.filter(n => n.id !== noteId);
+      }
       renderNotes(currentCategoryId);
+      if (isNewNote) {
+        saveData();
+      }
     };
+    
+    // 点击外部区域关闭编辑
+    const handleClickOutside = (e) => {
+      if (!noteItem.contains(e.target)) {
+        cancelHandler();
+        document.removeEventListener('click', handleClickOutside);
+      }
+    };
+    
+    // 延迟添加点击外部监听，避免立即触发
+    setTimeout(() => {
+      document.addEventListener('click', handleClickOutside);
+    }, 100);
     
     textarea.onkeydown = function(e) {
       if (e.key === 'Escape') {
         e.preventDefault();
+        document.removeEventListener('click', handleClickOutside);
         cancelHandler();
       } else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
+        document.removeEventListener('click', handleClickOutside);
         saveHandler();
       }
+    };
+    
+    // 阻止点击textarea时触发外部点击事件
+    textarea.onclick = (e) => {
+      e.stopPropagation();
     };
     
     contentDiv.style.display = 'none';
@@ -300,13 +335,21 @@ export const script = `
     saveBtn.className = 'note-btn save';
     saveBtn.textContent = '✓';
     saveBtn.title = '保存 (Ctrl+Enter)';
-    saveBtn.onclick = () => saveHandler();
+    saveBtn.onclick = (e) => {
+      e.stopPropagation();
+      document.removeEventListener('click', handleClickOutside);
+      saveHandler();
+    };
     
     const cancelBtn = document.createElement('button');
     cancelBtn.className = 'note-btn cancel';
     cancelBtn.textContent = '✕';
     cancelBtn.title = '取消 (Esc)';
-    cancelBtn.onclick = () => cancelHandler();
+    cancelBtn.onclick = (e) => {
+      e.stopPropagation();
+      document.removeEventListener('click', handleClickOutside);
+      cancelHandler();
+    };
     
     actions.innerHTML = '';
     actions.appendChild(saveBtn);
